@@ -1,10 +1,19 @@
-  
-import React from 'react'
-import '@testing-library/jest-dom/extend-expect'
-import Dashboard from './Dashboard'
-import { render, fireEvent } from '@testing-library/react'
+import React from "react";
+import { render } from "@testing-library/react";
+import '@testing-library/jest-dom/extend-expect';
 
-test('Renders dashboard correctly', ()=> {
-    const wrapper = render(<Dashboard/>);
-    expect(wrapper.asFragment()).toMatchSnapshot();
-})
+import Dashboard from "./Dashboard";
+
+test("Dashboard.js renders properly", () => {
+  expect(render(<Dashboard />)).toMatchSnapshot();
+});
+
+test("Display component renders properly", () => {
+  const { getByText } = render(<Dashboard />);
+  expect(getByText("Unlocked")).toBeInTheDocument();
+});
+
+test("Controls component renders properly", () => {
+  const { getByText } = render(<Dashboard />);
+  expect(getByText("Close Gate")).toBeInTheDocument();
+});

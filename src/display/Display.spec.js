@@ -1,32 +1,43 @@
-import React from 'react';
+import React from "react";
+import { render } from "@testing-library/react";
 import '@testing-library/jest-dom/extend-expect';
-import Display from './Display';
-import { render, fireEvent } from '@testing-library/react';
+import Display from "./Display.js";
 
-test('displays open green', ()=>{
-    const {getByText} = render(<Display closed={false} locked={false} />)
-    const open = getByText(/open/i)
-    expect(open).toBeDefined();
-    expect(open).toHaveClass('green-led');
-})
+test("Display.js renders correctly", () => {
+  expect(render(<Display />)).toMatchSnapshot();
+});
 
-test('displays closed with red', ()=>{
-    const {getByText} = render(<Display closed={true} locked={false} />)
-    const closed = getByText(/closed/i)
-    expect(closed).toBeDefined();
-    expect(closed).toHaveClass('red-led')
-})
+test("Gate is unlocked and open by default", () => {
+  const { getByText } = render(<Display />);
 
-test('displays unlocked green', ()=>{
-    const {getByText} = render(<Display closed={false} locked={false} />)
-    const unlocked = getByText(/unlocked/i)
-    expect(unlocked).toBeDefined();
-    expect(unlocked).toHaveClass('green-led');
-})
+  expect(getByText("Unlocked")).toBeInTheDocument();
+  expect(getByText("Open")).toBeInTheDocument();
+});
 
-test('displays locked with red', ()=>{
-    const {getByText} = render(<Display closed={true} locked={true} />)
-    const locked = getByText(/locked/i)
-    expect(locked).toBeDefined();
-    expect(locked).toHaveClass('red-led')
-})
+test("Gate is unlocked and opened if locked and closed = false", () => {
+  const { getByText } = render(<Display locked={false} closed={false} />);
+
+  expect(getByText("Unlocked")).toBeInTheDocument();
+  expect(getByText("Open")).toBeInTheDocument();
+});
+
+test("Gate is locked and closed if locked and closed = true", () => {
+  const { getByText } = render(<Display locked={true} closed={true} />);
+
+  expect(getByText("Locked")).toBeInTheDocument();
+  expect(getByText("Closed")).toBeInTheDocument();
+});
+
+test("The class 'red-led' is used when the Gate is closed or locked", () => {
+  const { getByText } = render(<Display locked={true} closed={true} />);
+
+  expect(getByText("Locked").classList.contains("red-led")).toBe(true);
+  expect(getByText("Closed").classList.contains("red-led")).toBe(true);
+});
+
+test("The class 'green-led' is used when the Gate is unlocked or open", () => {
+  const { getByText } = render(<Display locked={false} closed={false} />);
+
+  expect(getByText("Unlocked").classList.contains("green-led")).toBe(true);
+  expect(getByText("Open").classList.contains("green-led")).toBe(true);
+});
