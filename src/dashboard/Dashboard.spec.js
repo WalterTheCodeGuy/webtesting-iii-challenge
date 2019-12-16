@@ -1,25 +1,10 @@
-import React from 'react';
-import Dashboard from './Dashboard';
-import { render, cleanup} from '@testing-library/react';
-import renderer from 'react-test-renderer';
+  
+import React from 'react'
+import '@testing-library/jest-dom/extend-expect'
+import Dashboard from './Dashboard'
+import { render, fireEvent } from '@testing-library/react'
 
-afterEach(cleanup);
-
-test('Dashboard renders correctly', () => {
-    render(<Dashboard />);
-  });
-
-describe('<Dashboard />', () => {
-    it('should match snapshot', () => {
-        const tree = renderer.create(<Dashboard />).toJSON();
-        expect(tree).toMatchSnapshot();
-    });
-});
-
-test('Dashboard renders controls and display', () => {
+test('Renders dashboard correctly', ()=> {
     const wrapper = render(<Dashboard/>);
-    const display = wrapper.container.querySelector('.display');
-    const controls = wrapper.container.querySelector('.controls');
-    expect(display).toBeTruthy();
-    expect(controls).toBeTruthy();
-});
+    expect(wrapper.asFragment()).toMatchSnapshot();
+})

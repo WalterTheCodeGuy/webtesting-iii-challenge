@@ -1,23 +1,32 @@
 import React from 'react';
+import '@testing-library/jest-dom/extend-expect';
 import Display from './Display';
-import {render, fireEvent, cleanup} from '@testing-library/react';
-import renderer from 'react-test-renderer';
+import { render, fireEvent } from '@testing-library/react';
 
-afterEach(cleanup);
+test('displays open green', ()=>{
+    const {getByText} = render(<Display closed={false} locked={false} />)
+    const open = getByText(/open/i)
+    expect(open).toBeDefined();
+    expect(open).toHaveClass('green-led');
+})
 
-test('Disply renders correctly', () => {
-  render(<Display />);
-});
+test('displays closed with red', ()=>{
+    const {getByText} = render(<Display closed={true} locked={false} />)
+    const closed = getByText(/closed/i)
+    expect(closed).toBeDefined();
+    expect(closed).toHaveClass('red-led')
+})
 
-describe('<Display />', () => {
-  it('should match snapshot', () => {
-    const tree = renderer.create(<Display />).toJSON();
-    expect(tree).toMatchSnapshot();
-  });
-});
+test('displays unlocked green', ()=>{
+    const {getByText} = render(<Display closed={false} locked={false} />)
+    const unlocked = getByText(/unlocked/i)
+    expect(unlocked).toBeDefined();
+    expect(unlocked).toHaveClass('green-led');
+})
 
-test('Gate defaults to unlocked and open', () => {
-  const {getByText} = render(<Display />);
-  getByText(/unlocked/i);
-  getByText(/open/i);
-});
+test('displays locked with red', ()=>{
+    const {getByText} = render(<Display closed={true} locked={true} />)
+    const locked = getByText(/locked/i)
+    expect(locked).toBeDefined();
+    expect(locked).toHaveClass('red-led')
+})
